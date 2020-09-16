@@ -1,0 +1,34 @@
+ts=2020-09-16T15:51:54.833389115Z caller=main.go:217 msg="Starting Prometheus Operator version '0.40.0'."
+ts=2020-09-16T15:51:54.928056034Z caller=main.go:104 msg="Starting insecure server on [::]:8080"
+level=info ts=2020-09-16T15:51:55.02647549Z caller=operator.go:461 component=prometheusoperator msg="connection established" cluster-version=v1.18.8
+level=info ts=2020-09-16T15:51:55.02647902Z caller=operator.go:295 component=thanosoperator msg="connection established" cluster-version=v1.18.8
+level=info ts=2020-09-16T15:51:55.026477471Z caller=operator.go:200 component=alertmanageroperator msg="connection established" cluster-version=v1.18.8
+level=info ts=2020-09-16T15:51:55.026538563Z caller=operator.go:304 component=thanosoperator msg="CRD API endpoints ready"
+level=info ts=2020-09-16T15:51:55.026533103Z caller=operator.go:470 component=prometheusoperator msg="CRD API endpoints ready"
+level=info ts=2020-09-16T15:51:55.026555721Z caller=operator.go:209 component=alertmanageroperator msg="CRD API endpoints ready"
+E0916 15:51:55.120225       1 reflector.go:178] github.com/coreos/prometheus-operator/pkg/thanos/operator.go:311: Failed to list *v1.ThanosRuler: thanosrulers.monitoring.coreos.com is forbidden: User "system:serviceaccount:monitoring:prometheus-operator" cannot list resource "thanosrulers" in API group "monitoring.coreos.com" at the cluster scope
+level=info ts=2020-09-16T15:51:55.837088245Z caller=operator.go:407 component=prometheusoperator msg="successfully synced all caches"
+level=warn ts=2020-09-16T15:51:55.837306434Z caller=operator.go:1206 component=prometheusoperator msg="prometheus key=monitoring/k8s, field spec.baseImage is deprecated, 'spec.image' field should be used instead"
+level=info ts=2020-09-16T15:51:55.837393824Z caller=operator.go:1122 component=prometheusoperator msg="sync prometheus" key=monitoring/k8s
+level=info ts=2020-09-16T15:51:56.016711501Z caller=operator.go:171 component=alertmanageroperator msg="successfully synced all caches"
+level=warn ts=2020-09-16T15:51:56.016892173Z caller=operator.go:484 component=alertmanageroperator msg="alertmanager key=monitoring/main, field spec.baseImage is deprecated, 'spec.image' field should be used instead"
+level=info ts=2020-09-16T15:51:56.017035263Z caller=operator.go:427 component=alertmanageroperator msg="sync alertmanager" key=monitoring/main
+level=info ts=2020-09-16T15:51:56.322181373Z caller=operator.go:427 component=alertmanageroperator msg="sync alertmanager" key=monitoring/main
+E0916 15:51:56.420011       1 reflector.go:178] github.com/coreos/prometheus-operator/pkg/thanos/operator.go:311: Failed to list *v1.ThanosRuler: thanosrulers.monitoring.coreos.com is forbidden: User "system:serviceaccount:monitoring:prometheus-operator" cannot list resource "thanosrulers" in API group "monitoring.coreos.com" at the cluster scope
+level=info ts=2020-09-16T15:51:56.518367624Z caller=operator.go:427 component=alertmanageroperator msg="sync alertmanager" key=monitoring/main
+level=info ts=2020-09-16T15:51:56.617311872Z caller=operator.go:427 component=alertmanageroperator msg="sync alertmanager" key=monitoring/main
+level=info ts=2020-09-16T15:51:56.728471558Z caller=operator.go:1122 component=prometheusoperator msg="sync prometheus" key=monitoring/k8s
+level=info ts=2020-09-16T15:51:57.057555242Z caller=operator.go:1122 component=prometheusoperator msg="sync prometheus" key=monitoring/k8s
+E0916 15:51:58.772246       1 reflector.go:178] github.com/coreos/prometheus-operator/pkg/thanos/operator.go:311: Failed to list *v1.ThanosRuler: thanosrulers.monitoring.coreos.com is forbidden: User "system:serviceaccount:monitoring:prometheus-operator" cannot list resource "thanosrulers" in API group "monitoring.coreos.com" at the cluster scope
+level=info ts=2020-09-16T15:52:02.104355573Z caller=operator.go:427 component=alertmanageroperator msg="sync alertmanager" key=monitoring/main
+level=info ts=2020-09-16T15:52:02.127470397Z caller=operator.go:427 component=alertmanageroperator msg="sync alertmanager" key=monitoring/main
+E0916 15:52:02.879304       1 reflector.go:178] github.com/coreos/prometheus-operator/pkg/thanos/operator.go:311: Failed to list *v1.ThanosRuler: thanosrulers.monitoring.coreos.com is forbidden: User "system:serviceaccount:monitoring:prometheus-operator" cannot list resource "thanosrulers" in API group "monitoring.coreos.com" at the cluster scope
+level=info ts=2020-09-16T15:52:03.841056454Z caller=operator.go:427 component=alertmanageroperator msg="sync alertmanager" key=monitoring/main
+level=info ts=2020-09-16T15:52:03.868704585Z caller=operator.go:427 component=alertmanageroperator msg="sync alertmanager" key=monitoring/main
+level=info ts=2020-09-16T15:52:03.917162682Z caller=operator.go:427 component=alertmanageroperator msg="sync alertmanager" key=monitoring/main
+level=info ts=2020-09-16T15:52:03.952888022Z caller=operator.go:427 component=alertmanageroperator msg="sync alertmanager" key=monitoring/main
+E0916 15:52:11.156783       1 reflector.go:178] github.com/coreos/prometheus-operator/pkg/thanos/operator.go:311: Failed to list *v1.ThanosRuler: thanosrulers.monitoring.coreos.com is forbidden: User "system:serviceaccount:monitoring:prometheus-operator" cannot list resource "thanosrulers" in API group "monitoring.coreos.com" at the cluster scope
+level=info ts=2020-09-16T15:52:11.979209098Z caller=operator.go:1122 component=prometheusoperator msg="sync prometheus" key=monitoring/k8s
+level=info ts=2020-09-16T15:52:12.14051631Z caller=operator.go:1122 component=prometheusoperator msg="sync prometheus" key=monitoring/k8s
+E0916 15:52:32.651172       1 reflector.go:178] github.com/coreos/prometheus-operator/pkg/thanos/operator.go:311: Failed to list *v1.ThanosRuler: thanosrulers.monitoring.coreos.com is forbidden: User "system:serviceaccount:monitoring:prometheus-operator" cannot list resource "thanosrulers" in API group "monitoring.coreos.com" at the cluster scope
+E0916 15:53:03.847827       1 reflector.go:178] github.com/coreos/prometheus-operator/pkg/thanos/operator.go:311: Failed to list *v1.ThanosRuler: thanosrulers.monitoring.coreos.com is forbidden: User "system:serviceaccount:monitoring:prometheus-operator" cannot list resource "thanosrulers" in API group "monitoring.coreos.com" at the cluster scope

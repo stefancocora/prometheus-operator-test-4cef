@@ -1,5 +1,5 @@
-local g = import 'grafana-builder/grafana.libsonnet';
-local grafana = import 'grafonnet/grafana.libsonnet';
+local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
+local g = import 'github.com/grafana/jsonnet-libs/grafana-builder/grafana.libsonnet';
 local template = grafana.template;
 
 {
@@ -86,7 +86,7 @@ local template = grafana.template;
         .addRow(
           g.row('Memory Requests')
           .addPanel(
-            g.panel('Requests by Namespace') +
+            g.panel('Requests by Cluster') +
             g.tablePanel([
               // Not using container_memory_usage_bytes here because that includes page cache
               'sum(container_memory_rss{container!=""}) by (%(clusterLabel)s)' % $._config,

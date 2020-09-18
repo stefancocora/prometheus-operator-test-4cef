@@ -1,0 +1,27 @@
+ts=2020-09-18T15:28:08.525312264Z caller=main.go:219 msg="Starting Prometheus Operator version '0.42.0'."
+ts=2020-09-18T15:28:08.610792228Z caller=main.go:105 msg="Starting insecure server on [::]:8080"
+level=info ts=2020-09-18T15:28:08.707446345Z caller=operator.go:310 component=thanosoperator msg="connection established" cluster-version=v1.18.8
+level=info ts=2020-09-18T15:28:08.707440423Z caller=operator.go:204 component=alertmanageroperator msg="connection established" cluster-version=v1.18.8
+level=info ts=2020-09-18T15:28:08.70747485Z caller=operator.go:512 component=prometheusoperator msg="connection established" cluster-version=v1.18.8
+level=info ts=2020-09-18T15:28:08.707503163Z caller=operator.go:319 component=thanosoperator msg="CRD API endpoints ready"
+level=info ts=2020-09-18T15:28:08.707517057Z caller=operator.go:213 component=alertmanageroperator msg="CRD API endpoints ready"
+level=info ts=2020-09-18T15:28:08.707530075Z caller=operator.go:521 component=prometheusoperator msg="CRD API endpoints ready"
+level=info ts=2020-09-18T15:28:09.30879543Z caller=operator.go:175 component=alertmanageroperator msg="successfully synced all caches"
+level=info ts=2020-09-18T15:28:09.409893304Z caller=operator.go:271 component=thanosoperator msg="successfully synced all caches"
+level=info ts=2020-09-18T15:28:09.417862116Z caller=operator.go:451 component=prometheusoperator msg="successfully synced all caches"
+level=info ts=2020-09-18T15:28:09.970704738Z caller=operator.go:424 component=alertmanageroperator msg="sync alertmanager" key=monitoring/main
+level=info ts=2020-09-18T15:28:10.223666443Z caller=operator.go:424 component=alertmanageroperator msg="sync alertmanager" key=monitoring/main
+level=info ts=2020-09-18T15:28:11.108274948Z caller=operator.go:424 component=alertmanageroperator msg="sync alertmanager" key=monitoring/main
+level=info ts=2020-09-18T15:28:11.19045453Z caller=operator.go:424 component=alertmanageroperator msg="sync alertmanager" key=monitoring/main
+level=info ts=2020-09-18T15:28:11.278047569Z caller=operator.go:1228 component=prometheusoperator msg="sync prometheus" key=monitoring/k8s
+level=info ts=2020-09-18T15:28:11.477334195Z caller=operator.go:1228 component=prometheusoperator msg="sync prometheus" key=monitoring/k8s
+level=info ts=2020-09-18T15:28:12.201929373Z caller=operator.go:1228 component=prometheusoperator msg="sync prometheus" key=monitoring/k8s
+level=info ts=2020-09-18T15:28:12.763831356Z caller=operator.go:1228 component=prometheusoperator msg="sync prometheus" key=monitoring/k8s
+level=info ts=2020-09-18T15:28:17.379131723Z caller=operator.go:424 component=alertmanageroperator msg="sync alertmanager" key=monitoring/main
+level=info ts=2020-09-18T15:28:17.402630219Z caller=operator.go:424 component=alertmanageroperator msg="sync alertmanager" key=monitoring/main
+level=info ts=2020-09-18T15:28:20.107303301Z caller=operator.go:424 component=alertmanageroperator msg="sync alertmanager" key=monitoring/main
+level=info ts=2020-09-18T15:28:20.163871322Z caller=operator.go:424 component=alertmanageroperator msg="sync alertmanager" key=monitoring/main
+level=info ts=2020-09-18T15:28:20.849787862Z caller=operator.go:424 component=alertmanageroperator msg="sync alertmanager" key=monitoring/main
+level=info ts=2020-09-18T15:28:20.933956566Z caller=operator.go:424 component=alertmanageroperator msg="sync alertmanager" key=monitoring/main
+level=info ts=2020-09-18T15:28:31.242127951Z caller=operator.go:1228 component=prometheusoperator msg="sync prometheus" key=monitoring/k8s
+level=info ts=2020-09-18T15:28:38.113836318Z caller=operator.go:1228 component=prometheusoperator msg="sync prometheus" key=monitoring/k8s

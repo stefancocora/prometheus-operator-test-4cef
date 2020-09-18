@@ -1,4 +1,4 @@
-local grafana = import 'grafonnet/grafana.libsonnet';
+local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
 local dashboard = grafana.dashboard;
 local row = grafana.row;
 local prometheus = grafana.prometheus;
@@ -247,10 +247,10 @@ local singlestat = grafana.singlestat;
           span=12,
         ),
         gridPos={
-          "h": 2,
-          "w": 24,
-          "x": 0,
-          "y": 0
+          h: 2,
+          w: 24,
+          x: 0,
+          y: 0,
         },
       )
       .addRow(

@@ -8,12 +8,12 @@
           "subdir": "grafana"
         }
       },
-      "version": "release-0.1"
+      "version": "master"
     },
     {
       "source": {
         "git": {
-          "remote": "https://github.com/coreos/etcd",
+          "remote": "https://github.com/etcd-io/etcd",
           "subdir": "Documentation/etcd-mixin"
         }
       },
@@ -22,11 +22,11 @@
     {
       "source": {
         "git": {
-          "remote": "https://github.com/coreos/prometheus-operator",
+          "remote": "https://github.com/prometheus-operator/prometheus-operator",
           "subdir": "jsonnet/prometheus-operator"
         }
       },
-      "version": "release-0.40"
+      "version": "release-0.42"
     },
     {
       "source": {
@@ -45,7 +45,7 @@
           "subdir": ""
         }
       },
-      "version": "release-0.5"
+      "version": "master"
     },
     {
       "source": {
@@ -54,7 +54,7 @@
           "subdir": "jsonnet/kube-state-metrics"
         }
       },
-      "version": "release-1.9"
+      "version": "master"
     },
     {
       "source": {
@@ -63,7 +63,7 @@
           "subdir": "jsonnet/kube-state-metrics-mixin"
         }
       },
-      "version": "release-1.9"
+      "version": "master"
     },
     {
       "source": {

@@ -8,28 +8,18 @@
           "subdir": "grafana"
         }
       },
-      "version": "57b4365eacda291b82e0d55ba7eec573a8198dda",
-      "sum": "92DWADwGjnCfpZaL7Q07C0GZayxBziGla/O03qWea34="
+      "version": "d7c1a53462ecd533593c60e5277b92fbf7ea7623",
+      "sum": "8OnIwMhzWtgoWYHNrDlkzUAMr/CPsWKauYEv0vnH1zs="
     },
     {
       "source": {
         "git": {
-          "remote": "https://github.com/coreos/etcd.git",
+          "remote": "https://github.com/etcd-io/etcd.git",
           "subdir": "Documentation/etcd-mixin"
         }
       },
       "version": "588c021ddbdaafc4eb1661a76325ad707c7a344a",
       "sum": "NhOkJWkO7ZO2DSE8Fvipcs7Hh2/GOCS0WjPPZU8OiaQ="
-    },
-    {
-      "source": {
-        "git": {
-          "remote": "https://github.com/coreos/prometheus-operator.git",
-          "subdir": "jsonnet/prometheus-operator"
-        }
-      },
-      "version": "9b0857f9892bdb233d48b3870f9b1544c1fde226",
-      "sum": "WggWVWZ+CBEUThQCztSaRELbtqdXf9s3OFzf06HbYNA="
     },
     {
       "source": {
@@ -69,8 +59,8 @@
           "subdir": ""
         }
       },
-      "version": "a161500608ac2ca8908f2c318bd929ecd5e20415",
-      "sum": "mCzVPYGcvqge5epnrWZ8013OzXmu84g3j73EYsUcsm0="
+      "version": "0bbe890539df0c1477000322c73977af71ef71e9",
+      "sum": "h48bpWnNFX9iN9Uqc9y0NTlKQu8sA1izvNyAHzsMIX8="
     },
     {
       "source": {
@@ -89,8 +79,8 @@
           "subdir": "jsonnet/kube-state-metrics"
         }
       },
-      "version": "89aaf6c524ee891140c4c8f2a05b1b16f5847309",
-      "sum": "zD/pbQLnQq+5hegEelaheHS8mn1h09GTktFO74iwlBI="
+      "version": "a4e53c37b80440220218fd746d28e936f12e31a5",
+      "sum": "WJGwddC7KJnEN7CWGELiOHKam+vmv9XYkwrMCwmXi2M="
     },
     {
       "source": {
@@ -99,8 +89,8 @@
           "subdir": "jsonnet/kube-state-metrics-mixin"
         }
       },
-      "version": "89aaf6c524ee891140c4c8f2a05b1b16f5847309",
-      "sum": "E1GGavnf9PCWBm4WVrxWnc0FIj72UcbcweqGioWrOdU="
+      "version": "a4e53c37b80440220218fd746d28e936f12e31a5",
+      "sum": "Yf8mNAHrV1YWzrdV8Ry5dJ8YblepTGw3C0Zp10XIYLo="
     },
     {
       "source": {
@@ -109,8 +99,18 @@
           "subdir": "jsonnet/kube-prometheus"
         }
       },
-      "version": "82fe2a3b06d74f9b31196e4d9cc503b86c4d0f0d",
-      "sum": "TKveGzwy9vljvq6YFNIMeBqzxt2dDv9ZSuQOtwxF9ik="
+      "version": "59d6843d3d0c67ba0339241c6e4c38582a78fe3f",
+      "sum": "lc0MmghWZ8T3TdgStuiAaTJppvcubsTEsxrk9SE9i1I="
+    },
+    {
+      "source": {
+        "git": {
+          "remote": "https://github.com/prometheus-operator/prometheus-operator.git",
+          "subdir": "jsonnet/prometheus-operator"
+        }
+      },
+      "version": "96094ad1ab039950537df448b95bbcc04c57bfc4",
+      "sum": "ReamRYoS2C39Of7KtXGqkSWdfHw5Fy/Ix6ujOmBLFAg="
     },
     {
       "source": {

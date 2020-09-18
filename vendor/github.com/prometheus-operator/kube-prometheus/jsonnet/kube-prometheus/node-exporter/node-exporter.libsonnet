@@ -1,4 +1,4 @@
-local k = import 'ksonnet/ksonnet.beta.4/k.libsonnet';
+local k = import 'github.com/ksonnet/ksonnet-lib/ksonnet.beta.4/k.libsonnet';
 
 {
   _config+:: {
@@ -6,12 +6,10 @@ local k = import 'ksonnet/ksonnet.beta.4/k.libsonnet';
 
     versions+:: {
       nodeExporter: 'v0.18.1',
-      kubeRbacProxy: 'v0.4.1',
     },
 
     imageRepos+:: {
       nodeExporter: 'quay.io/prometheus/node-exporter',
-      kubeRbacProxy: 'quay.io/coreos/kube-rbac-proxy',
     },
 
     nodeExporter+:: {

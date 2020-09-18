@@ -7,10 +7,6 @@ local graphPanel = grafana.graphPanel;
 local tablePanel = grafana.tablePanel;
 local annotation = grafana.annotation;
 local singlestat = grafana.singlestat;
-local piechart = grafana.pieChartPanel;
-local promgrafonnet = import '../lib/promgrafonnet/promgrafonnet.libsonnet';
-local numbersinglestat = promgrafonnet.numbersinglestat;
-local gauge = promgrafonnet.gauge;
 
 {
   grafanaDashboards+:: {
@@ -43,40 +39,51 @@ local gauge = promgrafonnet.gauge;
         unit: unit,
       };
 
-      local newPieChartPanel(pieChartTitle, pieChartQuery) =
+      local newBarplotPanel(graphTitle, graphQuery, graphFormat='Bps', legendFormat='{{namespace}}') =
         local target =
           prometheus.target(
-            pieChartQuery
+            graphQuery
           ) + {
-            instant: null,
             intervalFactor: 1,
-            legendFormat: '{{workload}}',
+            legendFormat: legendFormat,
+            step: 10,
           };
 
-        piechart.new(
-          title=pieChartTitle,
+        graphPanel.new(
+          title=graphTitle,
+          span=24,
           datasource='$datasource',
-          pieType='donut',
+          fill=2,
+          min_span=24,
+          format=graphFormat,
+          min=0,
+          max=null,
+          show_xaxis=false,
+          x_axis_mode='series',
+          x_axis_values='current',
+          lines=false,
+          bars=true,
+          stack=false,
+          legend_show=true,
+          legend_values=true,
+          legend_min=false,
+          legend_max=false,
+          legend_current=true,
+          legend_avg=false,
+          legend_alignAsTable=true,
+          legend_rightSide=true,
+          legend_sort='current',
+          legend_sortDesc=true,
+          nullPointMode='null'
         ).addTarget(target) + {
-          breakpoint: '50%',
-          cacheTimeout: null,
-          combine: {
-            label: 'Others',
-            threshold: 0,
+          legend+: {
+            hideEmpty: true,
+            hideZero: true,
           },
-          fontSize: '80%',
-          format: 'Bps',
-          interval: null,
-          legend: {
-            percentage: true,
-            percentageDecimals: null,
-            show: true,
-            values: true,
+          paceLength: 10,
+          tooltip+: {
+            sort: 2,
           },
-          legendType: 'Right side',
-          maxDataPoints: 3,
-          nullPointMode: 'connected',
-          valueName: 'current',
         };
 
       local newGraphPanel(graphTitle, graphQuery, graphFormat='Bps') =
@@ -246,7 +253,7 @@ local gauge = promgrafonnet.gauge;
         template.new(
           name='type',
           datasource='$datasource',
-          query='label_values(mixin_pod_workload{namespace=~"$namespace", workload=~".+"}, workload_type)',
+          query='label_values(namespace_workload_pod:kube_pod_owner:relabel{namespace=~"$namespace", workload=~".+"}, workload_type)',
           current='deployment',
           hide='',
           refresh=1,
@@ -256,7 +263,7 @@ local gauge = promgrafonnet.gauge;
           auto: false,
           auto_count: 30,
           auto_min: '10s',
-          definition: 'label_values(mixin_pod_workload{namespace=~"$namespace", workload=~".+"}, workload_type)',
+          definition: 'label_values(namespace_workload_pod:kube_pod_owner:relabel{namespace=~"$namespace", workload=~".+"}, workload_type)',
           skipUrlSync: false,
         };
 
@@ -363,7 +370,7 @@ local gauge = promgrafonnet.gauge;
         tags=($._config.grafanaK8s.dashboardTags),
         editable=true,
         schemaVersion=18,
-        refresh='30s',
+        refresh=($._config.grafanaK8s.refresh),
         time_from='now-1h',
         time_to='now',
       )
@@ -390,24 +397,26 @@ local gauge = promgrafonnet.gauge;
       .addAnnotation(annotation.default)
       .addPanel(currentBandwidthRow, gridPos={ h: 1, w: 24, x: 0, y: 0 })
       .addPanel(
-        newPieChartPanel(
-          pieChartTitle='Current Rate of Bytes Received',
-          pieChartQuery=|||
+        newBarplotPanel(
+          graphTitle='Current Rate of Bytes Received',
+          graphQuery=|||
             sort_desc(sum(irate(container_network_receive_bytes_total{namespace=~"$namespace"}[$interval:$resolution])
             * on (namespace,pod)
-            group_left(workload,workload_type) mixin_pod_workload{namespace=~"$namespace", workload=~".+", workload_type="$type"}) by (workload))
+            group_left(workload,workload_type) namespace_workload_pod:kube_pod_owner:relabel{namespace=~"$namespace", workload=~".+", workload_type="$type"}) by (workload))
           |||,
+          legendFormat='{{ workload }}',
         ),
         gridPos={ h: 9, w: 12, x: 0, y: 1 }
       )
       .addPanel(
-        newPieChartPanel(
-          pieChartTitle='Current Rate of Bytes Transmitted',
-          pieChartQuery=|||
+        newBarplotPanel(
+          graphTitle='Current Rate of Bytes Transmitted',
+          graphQuery=|||
             sort_desc(sum(irate(container_network_transmit_bytes_total{namespace=~"$namespace"}[$interval:$resolution])
             * on (namespace,pod)
-            group_left(workload,workload_type) mixin_pod_workload{namespace=~"$namespace", workload=~".+", workload_type="$type"}) by (workload))
+            group_left(workload,workload_type) namespace_workload_pod:kube_pod_owner:relabel{namespace=~"$namespace", workload=~".+", workload_type="$type"}) by (workload))
           |||,
+          legendFormat='{{ workload }}',
         ),
         gridPos={ h: 9, w: 12, x: 12, y: 1 }
       )
@@ -418,42 +427,42 @@ local gauge = promgrafonnet.gauge;
             |||
               sort_desc(sum(irate(container_network_receive_bytes_total{namespace=~"$namespace"}[$interval:$resolution])
               * on (namespace,pod)
-              group_left(workload,workload_type) mixin_pod_workload{namespace=~"$namespace", workload=~".+", workload_type="$type"}) by (workload))
+              group_left(workload,workload_type) namespace_workload_pod:kube_pod_owner:relabel{namespace=~"$namespace", workload=~".+", workload_type="$type"}) by (workload))
             |||,
             |||
               sort_desc(sum(irate(container_network_transmit_bytes_total{namespace=~"$namespace"}[$interval:$resolution])
               * on (namespace,pod)
-              group_left(workload,workload_type) mixin_pod_workload{namespace=~"$namespace", workload=~".+", workload_type="$type"}) by (workload))
+              group_left(workload,workload_type) namespace_workload_pod:kube_pod_owner:relabel{namespace=~"$namespace", workload=~".+", workload_type="$type"}) by (workload))
             |||,
             |||
               sort_desc(avg(irate(container_network_receive_bytes_total{namespace=~"$namespace"}[$interval:$resolution])
               * on (namespace,pod)
-              group_left(workload,workload_type) mixin_pod_workload{namespace=~"$namespace", workload=~".+", workload_type="$type"}) by (workload))
+              group_left(workload,workload_type) namespace_workload_pod:kube_pod_owner:relabel{namespace=~"$namespace", workload=~".+", workload_type="$type"}) by (workload))
             |||,
             |||
               sort_desc(avg(irate(container_network_transmit_bytes_total{namespace=~"$namespace"}[$interval:$resolution])
               * on (namespace,pod)
-              group_left(workload,workload_type) mixin_pod_workload{namespace=~"$namespace", workload=~".+", workload_type="$type"}) by (workload))
+              group_left(workload,workload_type) namespace_workload_pod:kube_pod_owner:relabel{namespace=~"$namespace", workload=~".+", workload_type="$type"}) by (workload))
             |||,
             |||
               sort_desc(sum(irate(container_network_receive_packets_total{namespace=~"$namespace"}[$interval:$resolution])
               * on (namespace,pod)
-              group_left(workload,workload_type) mixin_pod_workload{namespace=~"$namespace", workload=~".+", workload_type="$type"}) by (workload))
+              group_left(workload,workload_type) namespace_workload_pod:kube_pod_owner:relabel{namespace=~"$namespace", workload=~".+", workload_type="$type"}) by (workload))
             |||,
             |||
               sort_desc(sum(irate(container_network_transmit_packets_total{namespace=~"$namespace"}[$interval:$resolution])
               * on (namespace,pod)
-              group_left(workload,workload_type) mixin_pod_workload{namespace=~"$namespace", workload=~".+", workload_type="$type"}) by (workload))
+              group_left(workload,workload_type) namespace_workload_pod:kube_pod_owner:relabel{namespace=~"$namespace", workload=~".+", workload_type="$type"}) by (workload))
             |||,
             |||
               sort_desc(sum(irate(container_network_receive_packets_dropped_total{namespace=~"$namespace"}[$interval:$resolution])
               * on (namespace,pod)
-              group_left(workload,workload_type) mixin_pod_workload{namespace=~"$namespace", workload=~".+", workload_type="$type"}) by (workload))
+              group_left(workload,workload_type) namespace_workload_pod:kube_pod_owner:relabel{namespace=~"$namespace", workload=~".+", workload_type="$type"}) by (workload))
             |||,
             |||
               sort_desc(sum(irate(container_network_transmit_packets_dropped_total{namespace=~"$namespace"}[$interval:$resolution])
               * on (namespace,pod)
-              group_left(workload,workload_type) mixin_pod_workload{namespace=~"$namespace", workload=~".+", workload_type="$type"}) by (workload))
+              group_left(workload,workload_type) namespace_workload_pod:kube_pod_owner:relabel{namespace=~"$namespace", workload=~".+", workload_type="$type"}) by (workload))
             |||,
           ]
         ),
@@ -462,24 +471,26 @@ local gauge = promgrafonnet.gauge;
       .addPanel(
         averageBandwidthRow
         .addPanel(
-          newPieChartPanel(
-            pieChartTitle='Average Rate of Bytes Received',
-            pieChartQuery=|||
+          newBarplotPanel(
+            graphTitle='Average Rate of Bytes Received',
+            graphQuery=|||
               sort_desc(avg(irate(container_network_receive_bytes_total{namespace=~"$namespace"}[$interval:$resolution])
               * on (namespace,pod)
-              group_left(workload,workload_type) mixin_pod_workload{namespace=~"$namespace", workload=~".+", workload_type="$type"}) by (workload))
+              group_left(workload,workload_type) namespace_workload_pod:kube_pod_owner:relabel{namespace=~"$namespace", workload=~".+", workload_type="$type"}) by (workload))
             |||,
+            legendFormat='{{ workload }}',
           ),
           gridPos={ h: 9, w: 12, x: 0, y: 20 }
         )
         .addPanel(
-          newPieChartPanel(
-            pieChartTitle='Average Rate of Bytes Transmitted',
-            pieChartQuery=|||
+          newBarplotPanel(
+            graphTitle='Average Rate of Bytes Transmitted',
+            graphQuery=|||
               sort_desc(avg(irate(container_network_transmit_bytes_total{namespace=~"$namespace"}[$interval:$resolution])
               * on (namespace,pod)
-              group_left(workload,workload_type) mixin_pod_workload{namespace=~"$namespace", workload=~".+", workload_type="$type"}) by (workload))
+              group_left(workload,workload_type) namespace_workload_pod:kube_pod_owner:relabel{namespace=~"$namespace", workload=~".+", workload_type="$type"}) by (workload))
             |||,
+            legendFormat='{{ workload }}',
           ),
           gridPos={ h: 9, w: 12, x: 12, y: 20 }
         ),
@@ -494,7 +505,7 @@ local gauge = promgrafonnet.gauge;
           graphQuery=|||
             sort_desc(sum(irate(container_network_receive_bytes_total{namespace=~"$namespace"}[$interval:$resolution])
             * on (namespace,pod)
-            group_left(workload,workload_type) mixin_pod_workload{namespace=~"$namespace", workload=~".+", workload_type="$type"}) by (workload))
+            group_left(workload,workload_type) namespace_workload_pod:kube_pod_owner:relabel{namespace=~"$namespace", workload=~".+", workload_type="$type"}) by (workload))
           |||,
         ),
         gridPos={ h: 9, w: 12, x: 0, y: 38 }
@@ -505,7 +516,7 @@ local gauge = promgrafonnet.gauge;
           graphQuery=|||
             sort_desc(sum(irate(container_network_transmit_bytes_total{namespace=~"$namespace"}[$interval:$resolution])
             * on (namespace,pod)
-            group_left(workload,workload_type) mixin_pod_workload{namespace=~"$namespace", workload=~".+", workload_type="$type"}) by (workload))
+            group_left(workload,workload_type) namespace_workload_pod:kube_pod_owner:relabel{namespace=~"$namespace", workload=~".+", workload_type="$type"}) by (workload))
           |||,
         ),
         gridPos={ h: 9, w: 12, x: 12, y: 38 }
@@ -518,7 +529,7 @@ local gauge = promgrafonnet.gauge;
             graphQuery=|||
               sort_desc(sum(irate(container_network_receive_packets_total{namespace=~"$namespace"}[$interval:$resolution])
               * on (namespace,pod)
-              group_left(workload,workload_type) mixin_pod_workload{namespace=~"$namespace", workload=~".+", workload_type="$type"}) by (workload))
+              group_left(workload,workload_type) namespace_workload_pod:kube_pod_owner:relabel{namespace=~"$namespace", workload=~".+", workload_type="$type"}) by (workload))
             |||,
             graphFormat='pps'
           ),
@@ -530,7 +541,7 @@ local gauge = promgrafonnet.gauge;
             graphQuery=|||
               sort_desc(sum(irate(container_network_transmit_packets_total{namespace=~"$namespace"}[$interval:$resolution])
               * on (namespace,pod)
-              group_left(workload,workload_type) mixin_pod_workload{namespace=~"$namespace", workload=~".+", workload_type="$type"}) by (workload))
+              group_left(workload,workload_type) namespace_workload_pod:kube_pod_owner:relabel{namespace=~"$namespace", workload=~".+", workload_type="$type"}) by (workload))
             |||,
             graphFormat='pps'
           ),
@@ -546,7 +557,7 @@ local gauge = promgrafonnet.gauge;
             graphQuery=|||
               sort_desc(sum(irate(container_network_receive_packets_dropped_total{namespace=~"$namespace"}[$interval:$resolution])
               * on (namespace,pod)
-              group_left(workload,workload_type) mixin_pod_workload{namespace=~"$namespace", workload=~".+", workload_type="$type"}) by (workload))
+              group_left(workload,workload_type) namespace_workload_pod:kube_pod_owner:relabel{namespace=~"$namespace", workload=~".+", workload_type="$type"}) by (workload))
             |||,
             graphFormat='pps'
           ),
@@ -558,7 +569,7 @@ local gauge = promgrafonnet.gauge;
             graphQuery=|||
               sort_desc(sum(irate(container_network_transmit_packets_dropped_total{namespace=~"$namespace"}[$interval:$resolution])
               * on (namespace,pod)
-              group_left(workload,workload_type) mixin_pod_workload{namespace=~"$namespace", workload=~".+", workload_type="$type"}) by (workload))
+              group_left(workload,workload_type) namespace_workload_pod:kube_pod_owner:relabel{namespace=~"$namespace", workload=~".+", workload_type="$type"}) by (workload))
             |||,
             graphFormat='pps'
           ),

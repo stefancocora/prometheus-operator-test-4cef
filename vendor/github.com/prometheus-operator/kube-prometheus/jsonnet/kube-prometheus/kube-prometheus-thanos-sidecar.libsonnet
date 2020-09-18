@@ -5,7 +5,7 @@ local servicePort = k.core.v1.service.mixin.spec.portsType;
 {
   _config+:: {
     versions+:: {
-      thanos: 'v0.7.0',
+      thanos: 'v0.14.0',
     },
     imageRepos+:: {
       thanos: 'quay.io/thanos/thanos',
@@ -30,7 +30,7 @@ local servicePort = k.core.v1.service.mixin.spec.portsType;
       spec+: {
         thanos+: {
           version: $._config.versions.thanos,
-          baseImage: $._config.imageRepos.thanos,
+          image: $._config.imageRepos.thanos + ':' + $._config.versions.thanos,
           objectStorageConfig: $._config.thanos.objectStorageConfig,
         },
       },

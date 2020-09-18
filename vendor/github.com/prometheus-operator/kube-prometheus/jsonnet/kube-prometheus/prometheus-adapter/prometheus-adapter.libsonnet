@@ -5,45 +5,58 @@ local k = import 'ksonnet/ksonnet.beta.4/k.libsonnet';
     namespace: 'default',
 
     versions+:: {
-      prometheusAdapter: 'v0.5.0',
+      prometheusAdapter: 'v0.7.0',
     },
 
     imageRepos+:: {
-      prometheusAdapter: 'quay.io/coreos/k8s-prometheus-adapter-amd64',
+      prometheusAdapter: 'directxman12/k8s-prometheus-adapter',
     },
 
     prometheusAdapter+:: {
       name: 'prometheus-adapter',
       labels: { name: $._config.prometheusAdapter.name },
-      prometheusURL: 'http://prometheus-' + $._config.prometheus.name + '.' + $._config.namespace + '.svc:9090/',
-      config: |||
-        resourceRules:
-          cpu:
-            containerQuery: sum(rate(container_cpu_usage_seconds_total{<<.LabelMatchers>>,container!="POD",container!="",pod!=""}[5m])) by (<<.GroupBy>>)
-            nodeQuery: sum(1 - rate(node_cpu_seconds_total{mode="idle"}[5m]) * on(namespace, pod) group_left(node) node_namespace_pod:kube_pod_info:{<<.LabelMatchers>>}) by (<<.GroupBy>>)
-            resources:
-              overrides:
-                node:
-                  resource: node
-                namespace:
-                  resource: namespace
-                pod:
-                  resource: pod
-            containerLabel: container
-          memory:
-            containerQuery: sum(container_memory_working_set_bytes{<<.LabelMatchers>>,container!="POD",container!="",pod!=""}) by (<<.GroupBy>>)
-            nodeQuery: sum(node_memory_MemTotal_bytes{job="node-exporter",<<.LabelMatchers>>} - node_memory_MemAvailable_bytes{job="node-exporter",<<.LabelMatchers>>}) by (<<.GroupBy>>)
-            resources:
-              overrides:
-                instance:
-                  resource: node
-                namespace:
-                  resource: namespace
-                pod:
-                  resource: pod
-            containerLabel: container
-          window: 5m
-      |||,
+      prometheusURL: 'http://prometheus-' + $._config.prometheus.name + '.' + $._config.namespace + '.svc.cluster.local:9090/',
+      config: {
+        resourceRules: {
+          cpu: {
+            containerQuery: 'sum(irate(container_cpu_usage_seconds_total{<<.LabelMatchers>>,container!="POD",container!="",pod!=""}[5m])) by (<<.GroupBy>>)',
+            nodeQuery: 'sum(1 - irate(node_cpu_seconds_total{mode="idle"}[5m]) * on(namespace, pod) group_left(node) node_namespace_pod:kube_pod_info:{<<.LabelMatchers>>}) by (<<.GroupBy>>)',
+            resources: {
+              overrides: {
+                node: {
+                  resource: 'node'
+                },
+                namespace: {
+                  resource: 'namespace'
+                },
+                pod: {
+                  resource: 'pod'
+                },
+              },
+            },
+            containerLabel: 'container'
+          },
+          memory: {
+            containerQuery: 'sum(container_memory_working_set_bytes{<<.LabelMatchers>>,container!="POD",container!="",pod!=""}) by (<<.GroupBy>>)',
+            nodeQuery: 'sum(node_memory_MemTotal_bytes{job="node-exporter",<<.LabelMatchers>>} - node_memory_MemAvailable_bytes{job="node-exporter",<<.LabelMatchers>>}) by (<<.GroupBy>>)',
+            resources: {
+              overrides: {
+                instance: {
+                  resource: 'node'
+                },
+                namespace: {
+                  resource: 'namespace'
+                },
+                pod: {
+                  resource: 'pod'
+                },
+              },
+            },
+            containerLabel: 'container'
+          },
+          window: '5m',
+        },
+      }
     },
   },
 
@@ -70,9 +83,36 @@ local k = import 'ksonnet/ksonnet.beta.4/k.libsonnet';
 
     configMap:
       local configmap = k.core.v1.configMap;
+      configmap.new('adapter-config', { 'config.yaml': std.manifestYamlDoc($._config.prometheusAdapter.config) }) +
 
-      configmap.new('adapter-config', { 'config.yaml': $._config.prometheusAdapter.config }) +
       configmap.mixin.metadata.withNamespace($._config.namespace),
+
+    serviceMonitor:
+      {
+        apiVersion: 'monitoring.coreos.com/v1',
+        kind: 'ServiceMonitor',
+        metadata: {
+          name: $._config.prometheusAdapter.name,
+          namespace: $._config.namespace,
+          labels: $._config.prometheusAdapter.labels,
+        },
+        spec: {
+          selector: {
+            matchLabels: $._config.prometheusAdapter.labels,
+          },
+          endpoints: [
+            {
+              port: 'https',
+              interval: '30s',
+              scheme: 'https',
+              tlsConfig: {
+                insecureSkipVerify: true,
+              },
+              bearerTokenFile: '/var/run/secrets/kubernetes.io/serviceaccount/token',
+            },
+          ],
+        },
+      },
 
     service:
       local service = k.core.v1.service;
